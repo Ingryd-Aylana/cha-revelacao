@@ -1,0 +1,236 @@
+.confirmacao-page {
+  min-height: 100vh;
+  padding: 40px 0 60px;
+}
+
+/* ===== VOLTAR ===== */
+.voltar-btn {
+  background: none;
+  border: none;
+  color: var(--texto-suave);
+  font-family: var(--fonte-corpo);
+  font-size: 0.88rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 28px;
+  display: block;
+  transition: color var(--transicao);
+  letter-spacing: 0.04em;
+}
+
+.voltar-btn:hover {
+  color: var(--marrom);
+}
+
+/* ===== HEADER ===== */
+.confirmacao-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.confirmacao-urso {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  animation: float 3s ease-in-out infinite;
+  display: block;
+}
+
+.confirmacao-titulo {
+  font-family: var(--fonte-script);
+  font-size: clamp(2rem, 7vw, 3rem);
+  color: var(--marrom);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.confirmacao-sub {
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+
+/* ===== FORM ===== */
+.form-card {
+  margin-bottom: 40px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+.opcional {
+  font-weight: 300;
+  font-style: italic;
+  color: var(--texto-claro);
+  font-size: 0.85em;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ===== PRESENÇA ===== */
+.presenca-opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.presenca-btn {
+  padding: 16px 10px;
+  border: 2px solid var(--bege-medio);
+  border-radius: var(--raio);
+  background: var(--bege-claro);
+  font-family: var(--fonte-corpo);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transicao);
+  color: var(--texto);
+}
+
+.presenca-btn:hover {
+  border-color: var(--marrom-claro);
+  background: var(--bege);
+}
+
+.presenca-sim-ativo {
+  background: rgba(184, 137, 90, 0.15) !important;
+  border-color: var(--marrom) !important;
+  color: var(--marrom) !important;
+  font-weight: 500;
+}
+
+.presenca-nao-ativo {
+  background: rgba(200, 200, 210, 0.15) !important;
+  border-color: #8a9aaa !important;
+  color: #4a5a6a !important;
+  font-weight: 500;
+}
+
+/* ===== ACOMPANHANTES ===== */
+.acomp-group {
+  animation: fadeIn 0.3s ease;
+}
+
+.numero-control {
+  display: flex;
+  align-items: center;
+  max-width: 150px;
+  border: 1.5px solid var(--bege-medio);
+  border-radius: var(--raio);
+  overflow: hidden;
+  background: white;
+}
+
+.numero-control button {
+  padding: 12px 18px;
+  border: none;
+  background: var(--bege-claro);
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--texto-suave);
+  transition: background var(--transicao);
+  font-family: var(--fonte-corpo);
+}
+
+.numero-control button:hover {
+  background: var(--bege-medio);
+}
+
+.numero-control span {
+  flex: 1;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--texto);
+}
+
+.input-hint {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  margin-top: 6px;
+}
+
+/* ===== CHUTE ===== */
+.chute-opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.chute-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border: 2px solid var(--bege-medio);
+  border-radius: 20px;
+  background: var(--bege-claro);
+  cursor: pointer;
+  transition: all var(--transicao);
+  font-family: var(--fonte-corpo);
+  color: var(--texto);
+  position: relative;
+}
+
+.chute-icon  { font-size: 2.2rem; }
+.chute-label { font-size: 0.95rem; }
+
+.chute-menina:hover {
+  border-color: #c4848a;
+  background: rgba(232, 180, 184, 0.1);
+}
+
+.chute-menino:hover {
+  border-color: #6a9ab5;
+  background: rgba(168, 197, 216, 0.1);
+}
+
+.chute-ativo.chute-menina {
+  background: rgba(232, 180, 184, 0.2) !important;
+  border-color: #c4848a !important;
+  color: #a0505a !important;
+  font-weight: 500;
+}
+
+.chute-ativo.chute-menino {
+  background: rgba(168, 197, 216, 0.2) !important;
+  border-color: #6a9ab5 !important;
+  color: #3a6a8a !important;
+  font-weight: 500;
+}
+
+.chute-check {
+  position: absolute;
+  top: 10px; right: 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ===== SUBMIT ===== */
+.submit-btn {
+  padding: 17px;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+}
+
+.form-nota {
+  font-size: 0.75rem;
+  color: var(--texto-claro);
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 540px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .chute-btn {
+    padding: 18px 10px;
+  }
+}
