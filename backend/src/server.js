@@ -1,38 +1,17 @@
+require('dotenv').config()
+
 const express = require('express')
 const cors = require('cors')
-const { v4: uuidv4 } = require('uuid')
+const path = require('path')
+const { supabase } = require('./lib/supabase')
 
 const app = express()
 const PORT = process.env.PORT || 3001
-
-// ===== MIDDLEWARES =====
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'x-admin-key']
-}))
-app.use(express.json())
-
-// ===== BANCO EM MEMÓRIA =====
-let confirmacoes = []
-
-let eventConfig = {
-  nomeCasal: 'Os futuros papais',
-  nomeBebe: 'Baby',
-  data: '29 de Março de 2025',
-  horario: '15h00',
-  local: 'Espaço Felicitá Festas',
-  endereco: 'R. Zanzibar, 132 — Paciência, Rio de Janeiro - RJ, 23585-818',
-  dataLimiteConfirmacao: '2025-03-10',
-  mensagemConvite: 'Venha descobrir com a gente!',
-  sugestaoPresentes: 'Fralda + Um Mimo  ou  Fralda + Lenço Umedecido',
-  marcasFraldas: 'Fraldas Huggies (Máxima Proteção), Turma da Mônica ou Babysec — Tamanhos M ou G',
-  dresscode: 'Para deixar esse dia ainda mais especial, pedimos que venham com roupas em tons neutros: Branco, Bege ou Off-White.'
-}
-
 const ADMIN_KEY = process.env.ADMIN_KEY || 'cha2025admin'
 
-// ===== MIDDLEWARE ADMIN =====
+app.use(cors())
+app.use(express.json())
+
 function verificarAdmin(req, res, next) {
   if (req.headers['x-admin-key'] !== ADMIN_KEY) {
     return res.status(401).json({ success: false, message: 'Não autorizado.' })
@@ -40,54 +19,142 @@ function verificarAdmin(req, res, next) {
   next()
 }
 
-// ==========================================
-// ROTAS — EVENTO
-// ==========================================
+function mapEventoFromDb(row) {
+  return {
+    id: row.id,
+    nomeCasal: row.nome_casal,
+    nomeBebe: row.nome_bebe,
+    data: row.data,
+    horario: row.horario,
+    local: row.local,
+    endereco: row.endereco,
+    dataLimiteConfirmacao: row.data_limite_confirmacao,
+    mensagemConvite: row.mensagem_convite,
+    sugestaoPresentes: row.sugestao_presentes,
+    marcasFraldas: row.marcas_fraldas,
+    dresscode: row.dresscode
+  }
+}
 
-// GET — buscar dados do evento (público)
-app.get('/api/evento', (req, res) => {
-  res.json({ success: true, data: eventConfig })
+function mapEventoToDb(body) {
+  return {
+    nome_casal: body.nomeCasal,
+    nome_bebe: body.nomeBebe,
+    data: body.data,
+    horario: body.horario,
+    local: body.local,
+    endereco: body.endereco,
+    data_limite_confirmacao: body.dataLimiteConfirmacao,
+    mensagem_convite: body.mensagemConvite,
+    sugestao_presentes: body.sugestaoPresentes,
+    marcas_fraldas: body.marcasFraldas,
+    dresscode: body.dresscode
+  }
+}
+
+/* =========================================
+   EVENTO
+========================================= */
+
+app.get('/api/evento', async (req, res) => {
+  const { data, error } = await supabase
+    .from('evento_config')
+    .select('*')
+    .limit(1)
+    .single()
+
+  if (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Erro ao buscar evento.' })
+  }
+
+  res.json({ success: true, data: mapEventoFromDb(data) })
 })
 
-// PUT — atualizar dados do evento (admin)
-app.put('/api/evento', verificarAdmin, (req, res) => {
-  eventConfig = { ...eventConfig, ...req.body }
+app.put('/api/evento', verificarAdmin, async (req, res) => {
+  const { data: atual, error: erroBusca } = await supabase
+    .from('evento_config')
+    .select('*')
+    .limit(1)
+    .single()
+
+  if (erroBusca) {
+    console.error(erroBusca)
+    return res.status(500).json({ success: false, message: 'Erro ao buscar evento.' })
+  }
+
+  const payload = {
+    ...Object.fromEntries(
+      Object.entries(mapEventoToDb(req.body)).filter(([, value]) => value !== undefined)
+    ),
+    updated_at: new Date().toISOString()
+  }
+
+  const { data, error } = await supabase
+    .from('evento_config')
+    .update(payload)
+    .eq('id', atual.id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Erro ao atualizar evento.' })
+  }
+
   res.json({
     success: true,
-    data: eventConfig,
+    data: mapEventoFromDb(data),
     message: 'Evento atualizado com sucesso!'
   })
 })
 
-// ==========================================
-// ROTAS — CONFIRMAÇÕES
-// ==========================================
+/* =========================================
+   CONFIRMAÇÕES
+========================================= */
 
-// GET — listar todas as confirmações (admin)
-app.get('/api/confirmacoes', verificarAdmin, (req, res) => {
+app.get('/api/confirmacoes', verificarAdmin, async (req, res) => {
+  const { data, error } = await supabase
+    .from('confirmacoes')
+    .select('*')
+    .order('criado_em', { ascending: false })
+
+  if (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Erro ao buscar confirmações.' })
+  }
+
   const stats = {
-    total: confirmacoes.length,
-    confirmados: confirmacoes.filter(c => c.presenca === 'sim').length,
-    naoVao: confirmacoes.filter(c => c.presenca === 'nao').length,
-    totalPessoas: confirmacoes
+    total: data.length,
+    confirmados: data.filter(c => c.presenca === 'sim').length,
+    naoVao: data.filter(c => c.presenca === 'nao').length,
+    totalPessoas: data
       .filter(c => c.presenca === 'sim')
       .reduce((acc, c) => acc + 1 + (c.acompanhantes || 0), 0),
-    chuteMenino: confirmacoes.filter(c => c.chute === 'menino').length,
-    chuteMenina: confirmacoes.filter(c => c.chute === 'menina').length,
+    chuteMenino: data.filter(c => c.chute === 'menino').length,
+    chuteMenina: data.filter(c => c.chute === 'menina').length
   }
-  res.json({ success: true, data: confirmacoes, stats })
+
+  const formatado = data.map(c => ({
+    id: c.id,
+    nome: c.nome,
+    email: c.email,
+    telefone: c.telefone,
+    presenca: c.presenca,
+    acompanhantes: c.acompanhantes,
+    chute: c.chute,
+    mensagem: c.mensagem,
+    criadoEm: c.criado_em
+  }))
+
+  res.json({ success: true, data: formatado, stats })
 })
 
-// POST — criar nova confirmação (público)
-app.post('/api/confirmacoes', (req, res) => {
+app.post('/api/confirmacoes', async (req, res) => {
   const { nome, email, telefone, presenca, acompanhantes, chute, mensagem } = req.body
 
-  // Validações
   if (!nome || nome.trim().length < 2) {
-    return res.status(400).json({
-      success: false,
-      message: 'Informe seu nome completo.'
-    })
+    return res.status(400).json({ success: false, message: 'Informe seu nome completo.' })
   }
 
   if (!presenca || !['sim', 'nao'].includes(presenca)) {
@@ -98,18 +165,22 @@ app.post('/api/confirmacoes', (req, res) => {
   }
 
   if (chute && !['menino', 'menina'].includes(chute)) {
-    return res.status(400).json({
-      success: false,
-      message: 'Chute inválido.'
-    })
+    return res.status(400).json({ success: false, message: 'Chute inválido.' })
   }
 
-  // Verifica e-mail duplicado
   if (email) {
-    const jaConfirmou = confirmacoes.find(
-      c => c.email?.toLowerCase() === email.toLowerCase()
-    )
-    if (jaConfirmou) {
+    const { data: existente, error: erroEmail } = await supabase
+      .from('confirmacoes')
+      .select('id')
+      .eq('email', email.trim().toLowerCase())
+      .maybeSingle()
+
+    if (erroEmail) {
+      console.error(erroEmail)
+      return res.status(500).json({ success: false, message: 'Erro ao validar e-mail.' })
+    }
+
+    if (existente) {
       return res.status(409).json({
         success: false,
         message: 'Este e-mail já realizou uma confirmação.'
@@ -117,85 +188,112 @@ app.post('/api/confirmacoes', (req, res) => {
     }
   }
 
-  // Cria confirmação
-  const nova = {
-    id: uuidv4(),
+  const payload = {
     nome: nome.trim(),
-    email: email?.trim() || null,
+    email: email ? email.trim().toLowerCase() : null,
     telefone: telefone?.trim() || null,
     presenca,
-    acompanhantes: parseInt(acompanhantes) || 0,
+    acompanhantes: parseInt(acompanhantes, 10) || 0,
     chute: chute || null,
-    mensagem: mensagem?.trim() || null,
-    criadoEm: new Date().toISOString(),
+    mensagem: mensagem?.trim() || null
   }
 
-  confirmacoes.push(nova)
+  const { data, error } = await supabase
+    .from('confirmacoes')
+    .insert(payload)
+    .select()
+    .single()
+
+  if (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Erro ao salvar confirmação.' })
+  }
 
   const primeiroNome = nome.trim().split(' ')[0]
 
   res.status(201).json({
     success: true,
-    message: presenca === 'sim'
-      ? `Uhuu! Sua presença foi confirmada, ${primeiroNome}! Te esperamos no dia 29 de Março! 🐻🎈`
-      : `Obrigado por avisar, ${primeiroNome}. Sentiremos muito sua falta! 🤍`,
-    data: nova
+    message:
+      presenca === 'sim'
+        ? `Uhuu! Sua presença foi confirmada, ${primeiroNome}!`
+        : `Obrigado por avisar, ${primeiroNome}. Sentiremos sua falta!`,
+    data: {
+      id: data.id,
+      nome: data.nome,
+      email: data.email,
+      telefone: data.telefone,
+      presenca: data.presenca,
+      acompanhantes: data.acompanhantes,
+      chute: data.chute,
+      mensagem: data.mensagem,
+      criadoEm: data.criado_em
+    }
   })
 })
 
-// GET — buscar confirmação por ID (admin)
-app.get('/api/confirmacoes/:id', verificarAdmin, (req, res) => {
-  const confirmacao = confirmacoes.find(c => c.id === req.params.id)
-  if (!confirmacao) {
-    return res.status(404).json({
-      success: false,
-      message: 'Confirmação não encontrada.'
-    })
-  }
-  res.json({ success: true, data: confirmacao })
-})
+app.delete('/api/confirmacoes/:id', verificarAdmin, async (req, res) => {
+  const { data, error } = await supabase
+    .from('confirmacoes')
+    .delete()
+    .eq('id', req.params.id)
+    .select()
 
-// DELETE — remover confirmação (admin)
-app.delete('/api/confirmacoes/:id', verificarAdmin, (req, res) => {
-  const index = confirmacoes.findIndex(c => c.id === req.params.id)
-  if (index === -1) {
-    return res.status(404).json({
-      success: false,
-      message: 'Confirmação não encontrada.'
-    })
+  if (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Erro ao remover confirmação.' })
   }
-  confirmacoes.splice(index, 1)
+
+  if (!data || data.length === 0) {
+    return res.status(404).json({ success: false, message: 'Confirmação não encontrada.' })
+  }
+
   res.json({ success: true, message: 'Confirmação removida com sucesso.' })
 })
 
-// ==========================================
-// HEALTH CHECK
-// ==========================================
-app.get('/api/health', (req, res) => {
+/* =========================================
+   HEALTH CHECK
+========================================= */
+
+app.get('/api/health', async (req, res) => {
+  const { count, error } = await supabase
+    .from('confirmacoes')
+    .select('*', { count: 'exact', head: true })
+
+  if (error) {
+    console.error(error)
+    return res.status(500).json({ success: false, message: 'Erro no health check.' })
+  }
+
   res.json({
     success: true,
-    message: 'API Chá Revelação 🐻 funcionando!',
-    confirmacoes: confirmacoes.length,
+    message: 'API funcionando!',
+    confirmacoes: count ?? 0,
     timestamp: new Date().toISOString()
   })
 })
 
-// ===== 404 =====
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Rota não encontrada.' })
+/* =========================================
+   FRONTEND BUILD
+========================================= */
+
+const frontendPath = path.join(__dirname, '../../frontend/dist')
+
+app.use(express.static(frontendPath))
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next()
+  res.sendFile(path.join(frontendPath, 'index.html'))
 })
 
-// ===== ERROR HANDLER =====
+/* =========================================
+   ERROR HANDLER
+========================================= */
+
 app.use((err, req, res, next) => {
-  console.error(err.stack)
+  console.error(err)
   res.status(500).json({ success: false, message: 'Erro interno do servidor.' })
 })
 
-// ===== START =====
-app.listen(PORT, () => {
-  console.log(`\n🐻 Chá Revelação API rodando na porta ${PORT}`)
-  console.log(`📡 http://localhost:${PORT}/api`)
-  console.log(`🔑 Admin key: ${ADMIN_KEY}\n`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`)
 })
-
-module.exports = app

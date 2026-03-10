@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cha-revelacao": "file:..",
     "lucide": "^0.577.0",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",
