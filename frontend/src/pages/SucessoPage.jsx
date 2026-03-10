@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import BalloonDecor from '../components/FloralDecor'
 import './SucessoPage.css'
 
+const ENDERECO_MAPS = 'https://www.google.com/maps/place/FFELICITÁ+FFESTAS/@-22.9176354,-43.6336829,246m/data=!3m1!1e3!4m6!3m5!1s0x9be5d77b4fe81b:0xfde54af9967f6f0d!8m2!3d-22.917842!4d-43.630333!16s%2Fg%2F11tb5shvml?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D'
+
 export default function SucessoPage() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -35,11 +37,11 @@ export default function SucessoPage() {
                 left: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 3}s`,
                 animationDuration: `${2.5 + Math.random() * 2.5}s`,
-                background: ['#d4b896','#c9a87a','#e8d4b8','#8b5e3c','#f0e8df'][
+                background: ['#d4b896', '#c9a87a', '#e8d4b8', '#8b5e3c', '#f0e8df'][
                   Math.floor(Math.random() * 5)
                 ],
                 borderRadius: Math.random() > 0.5 ? '50%' : '2px',
-                width:  `${8 + Math.random() * 8}px`,
+                width: `${8 + Math.random() * 8}px`,
                 height: `${8 + Math.random() * 8}px`,
               }}
             />
@@ -100,20 +102,9 @@ export default function SucessoPage() {
               </button>
 
               {foi && (
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: 'Chá Revelação 🐻',
-                        text: 'Fui convidado para um Chá Revelação! Venha descobrir conosco!',
-                        url: window.location.origin
-                      })
-                    }
-                  }}
-                >
-                  📤 Compartilhar
-                </button>
+                <a className="btn btn-secondary" href={ENDERECO_MAPS} target="_blank" rel="noopener noreferrer">
+                  📍 Ver no mapa
+                </a>
               )}
             </div>
 

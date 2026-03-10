@@ -7,27 +7,34 @@
 }
 
 .loading-bear {
-  font-size: 3.5rem;
+  font-size: 3rem;
   animation: float 1.5s ease-in-out infinite;
 }
 
 .convite-page {
   min-height: 100vh;
-  padding: 16px 0 24px;
+  padding: 12px 0 16px;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+/* ===== CONTAINER CENTRALIZADO ===== */
+.convite-page .container {
+  width: 100%;
+  max-width: 460px;
 }
 
 /* ===== CARD PRINCIPAL ===== */
 .convite-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(229, 216, 204, 0.7);
-  border-radius: 28px;
-  padding: 28px 32px 28px;
+  border-radius: 24px;
+  padding: 24px 28px 22px;
   box-shadow:
-    0 20px 60px rgba(74, 46, 26, 0.1),
-    0 4px 20px rgba(184, 137, 90, 0.12);
+    0 12px 40px rgba(74, 46, 26, 0.1),
+    0 4px 16px rgba(184, 137, 90, 0.1);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -36,7 +43,9 @@
 .convite-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--marrom-escuro), var(--marrom-claro), var(--marrom-escuro));
 }
@@ -44,76 +53,83 @@
 /* ===== NUVENS ===== */
 .nuvens-topo {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 60px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
   overflow: hidden;
   pointer-events: none;
 }
 
 .nuvem {
   position: absolute;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .nuvem-1 {
-  width: 100px; height: 40px;
-  top: 6px; left: -16px;
+  width: 90px;
+  height: 36px;
+  top: 5px;
+  left: -12px;
   border-radius: 60px;
 }
 
 .nuvem-2 {
-  width: 80px; height: 32px;
-  top: 14px; right: 24px;
+  width: 70px;
+  height: 28px;
+  top: 12px;
+  right: 20px;
   border-radius: 60px;
 }
 
 .nuvem-3 {
-  width: 60px; height: 28px;
-  top: 4px; right: -8px;
+  width: 55px;
+  height: 24px;
+  top: 3px;
+  right: -6px;
   border-radius: 60px;
 }
 
 /* ===== TÍTULO ===== */
 .convite-titulo-wrap {
-  margin-top: 16px;
-  margin-bottom: 10px;
+  margin-top: 12px;
+  margin-bottom: 8px;
 }
 
 .convite-titulo-script {
   font-family: var(--fonte-script);
-  font-size: clamp(2.8rem, 10vw, 4.2rem);
+  font-size: 3.2rem;
   font-weight: 700;
   color: var(--marrom);
   line-height: 1.0;
 }
 
 .convite-titulo-script-2 {
-  font-size: clamp(2.2rem, 8vw, 3.5rem);
+  font-size: 2.6rem;
   font-weight: 600;
 }
 
 /* ===== SUBTÍTULO ===== */
 .convite-sub {
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--texto-suave);
-  margin-bottom: 12px;
-  font-weight: 400;
+  margin-bottom: 10px;
 }
 
 /* ===== LINHA ===== */
 .convite-linha {
-  height: 1.5px;
+  height: 1px;
   background: linear-gradient(90deg, transparent, var(--marrom-claro), transparent);
-  margin: 10px auto;
-  width: 80%;
+  margin: 8px auto;
+  width: 85%;
 }
 
 /* ===== MENINA OU MENINO ===== */
 .menina-menino {
   font-family: var(--fonte-titulo);
-  font-size: clamp(1rem, 4vw, 1.4rem);
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--marrom);
   letter-spacing: 0.08em;
@@ -125,20 +141,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  margin: 12px 0 8px;
+  gap: 0px;
+  margin: 10px 0 6px;
 }
 
 .data-script {
   font-family: var(--fonte-script);
-  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  font-size: 2rem;
   color: var(--marrom);
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .hora-texto {
-  font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+  font-size: 1rem;
   font-family: var(--fonte-titulo);
   font-weight: 600;
   color: var(--marrom);
@@ -147,79 +163,76 @@
 
 /* ===== LOCAL ===== */
 .local-info {
-  margin: 8px 0 10px;
+  margin: 6px 0 8px;
 }
 
 .local-endereco {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--texto-suave);
-  letter-spacing: 0.04em;
   line-height: 1.5;
 }
 
 .local-nome {
-  font-size: 0.73rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: var(--texto-suave);
-  letter-spacing: 0.1em;
-  margin-top: 3px;
+  letter-spacing: 0.09em;
+  margin-top: 2px;
 }
 
 /* ===== URSO ===== */
 .urso-container {
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
 .urso-emoji {
-  font-size: 3.5rem;
+  font-size: 3rem;
   display: inline-block;
   animation: float 3.5s ease-in-out infinite;
-  filter: drop-shadow(0 6px 12px rgba(139, 94, 60, 0.2));
+  filter: drop-shadow(0 4px 10px rgba(139, 94, 60, 0.2));
 }
 
 /* ===== PRESENTES ===== */
 .presentes-box {
   background: var(--bege-claro);
   border: 1px solid var(--bege-medio);
-  border-radius: 14px;
-  padding: 14px 18px;
-  margin: 10px 0 10px;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 8px 0;
   text-align: center;
 }
 
 .presentes-titulo {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.13em;
   color: var(--marrom);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .presentes-texto {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: var(--texto);
-  line-height: 1.6;
-  margin-bottom: 6px;
+  line-height: 1.5;
+  margin-bottom: 4px;
 }
 
 .presentes-marcas {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--texto-suave);
-  letter-spacing: 0.03em;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* ===== DRESSCODE ===== */
 .dresscode-box {
   background: linear-gradient(135deg,
-    rgba(212, 184, 150, 0.18),
-    rgba(240, 232, 223, 0.3)
-  );
-  border: 1px solid rgba(184, 137, 90, 0.2);
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
-  font-size: 0.78rem;
+      rgba(212, 184, 150, 0.15),
+      rgba(240, 232, 223, 0.25));
+  border: 1px solid rgba(184, 137, 90, 0.18);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 0.73rem;
   color: var(--texto-suave);
   line-height: 1.5;
 }
@@ -230,30 +243,29 @@
 }
 
 .convite-cta {
-  padding: 14px 32px;
-  font-size: 0.88rem;
-  margin-bottom: 8px;
+  padding: 13px 28px;
+  font-size: 0.83rem;
+  margin-bottom: 6px;
 }
 
 .cta-hint {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--texto-claro);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 /* ===== ADMIN ===== */
 .admin-link-area {
   text-align: center;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .admin-link {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--texto-claro);
   text-decoration: none;
-  opacity: 0.5;
+  opacity: 0.45;
   transition: opacity 0.2s;
-  letter-spacing: 0.06em;
 }
 
 .admin-link:hover {
@@ -261,18 +273,44 @@
 }
 
 /* ===== RESPONSIVO ===== */
-@media (max-width: 640px) {
+@media (max-width: 500px) {
   .convite-page {
-    padding: 12px 0 20px;
+    padding: 10px 0 14px;
     align-items: flex-start;
   }
 
+  .convite-page .container {
+    max-width: 100%;
+  }
+
   .convite-card {
-    padding: 24px 18px 22px;
-    border-radius: 20px;
+    padding: 20px 16px 18px;
+    border-radius: 18px;
+  }
+
+  .convite-titulo-script {
+    font-size: 2.6rem;
+  }
+
+  .convite-titulo-script-2 {
+    font-size: 2.1rem;
   }
 
   .urso-emoji {
-    font-size: 3rem;
+    font-size: 2.6rem;
   }
+}
+
+/* ===== OU DESTAQUE ===== */
+.presentes-ou {
+  display: inline-block;
+  background:  var(--marrom-claro);
+  color: white;
+  font-size: 0.52rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 50px;
+  margin: 0 6px;
+  vertical-align: middle;
 }

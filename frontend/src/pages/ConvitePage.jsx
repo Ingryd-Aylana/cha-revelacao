@@ -89,7 +89,11 @@ export default function ConvitePage() {
             {evento.sugestaoPresentes && (
               <div className="presentes-box animate-fade-up animate-fade-up-delay-5">
                 <p className="presentes-titulo">SUGESTÃO DE PRESENTES:</p>
-                <p className="presentes-texto">{evento.sugestaoPresentes}</p>
+                <p className="presentes-texto">
+                  Fralda + Um Mimo
+                  <span className="presentes-ou"> OU </span>
+                  Fralda + Lenço Umedecido
+                </p>
                 {evento.marcasFraldas && (
                   <p className="presentes-marcas">{evento.marcasFraldas}</p>
                 )}

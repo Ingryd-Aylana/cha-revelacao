@@ -3,11 +3,19 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.admin-login-page .container {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  justify-content: center;
 }
 
 .admin-login-card {
+  width: 100%;
   max-width: 420px;
-  margin: 0 auto;
   text-align: center;
 }
 
@@ -64,6 +72,13 @@
 .admin-page {
   min-height: 100vh;
   padding: 40px 0 60px;
+}
+
+.admin-page .container-wide {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .admin-header {
@@ -256,6 +271,7 @@
 /* ===== FORM EVENTO ===== */
 .evento-form {
   max-width: 800px;
+  margin: 0 auto;
 }
 
 .evento-form-titulo {
@@ -292,6 +308,14 @@
 
 /* ===== RESPONSIVO ===== */
 @media (max-width: 640px) {
+  .admin-login-page .container {
+    max-width: 100%;
+  }
+
+  .admin-page .container-wide {
+    padding: 0 16px;
+  }
+
   .evento-form-grid {
     grid-template-columns: 1fr;
   }
@@ -299,4 +323,59 @@
   .span-2 {
     grid-column: span 1;
   }
+
+  .admin-header-actions {
+    width: 100%;
+  }
+
+  .admin-header-actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* ===== VER SENHA ===== */
+.senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.senha-wrapper input {
+  width: 100%;
+  padding-right: 48px;
+}
+
+.ver-senha-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+
+.ver-senha-btn:hover {
+  opacity: 1;
+}
+
+ 
+/* ===== BOTÃO ATUALIZAR ===== */
+.btn-atualizando {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.spin {
+  display: inline-block;
+  animation: spinOnce 0.6s linear infinite;
+}
+
+@keyframes spinOnce {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }

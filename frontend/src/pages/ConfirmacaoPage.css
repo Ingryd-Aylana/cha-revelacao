@@ -1,6 +1,15 @@
 .confirmacao-page {
   min-height: 100vh;
-  padding: 40px 0 60px;
+  padding: 12px 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== CONTAINER CENTRALIZADO ===== */
+.confirmacao-page .container {
+  width: 100%;
+  max-width: 460px;
 }
 
 /* ===== VOLTAR ===== */
@@ -9,10 +18,10 @@
   border: none;
   color: var(--texto-suave);
   font-family: var(--fonte-corpo);
-  font-size: 0.88rem;
+  font-size: 0.83rem;
   cursor: pointer;
   padding: 0;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   display: block;
   transition: color var(--transicao);
   letter-spacing: 0.04em;
@@ -25,40 +34,42 @@
 /* ===== HEADER ===== */
 .confirmacao-header {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 14px;
 }
 
 .confirmacao-urso {
-  font-size: 3rem;
-  margin-bottom: 8px;
+  font-size: 2.4rem;
+  margin-bottom: 4px;
   animation: float 3s ease-in-out infinite;
   display: block;
 }
 
 .confirmacao-titulo {
   font-family: var(--fonte-script);
-  font-size: clamp(2rem, 7vw, 3rem);
+  font-size: 2.2rem;
   color: var(--marrom);
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .confirmacao-sub {
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--texto-suave);
 }
 
-/* ===== FORM ===== */
+/* ===== FORM CARD ===== */
 .form-card {
-  margin-bottom: 40px;
+  margin-bottom: 16px;
+  padding: 22px 24px;
 }
 
+/* ===== FORM ROW ===== */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 16px;
+  gap: 0 12px;
 }
 
 .opcional {
@@ -70,20 +81,36 @@
   letter-spacing: 0;
 }
 
+/* ===== INPUTS ===== */
+.input-group {
+  margin-bottom: 14px;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+  padding: 10px 14px;
+  font-size: 0.92rem;
+}
+
+.input-group textarea {
+  min-height: 76px;
+}
+
 /* ===== PRESENÇA ===== */
 .presenca-opcoes {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .presenca-btn {
-  padding: 16px 10px;
+  padding: 13px 10px;
   border: 2px solid var(--bege-medio);
   border-radius: var(--raio);
   background: var(--bege-claro);
   font-family: var(--fonte-corpo);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all var(--transicao);
   color: var(--texto);
@@ -116,7 +143,7 @@
 .numero-control {
   display: flex;
   align-items: center;
-  max-width: 150px;
+  max-width: 130px;
   border: 1.5px solid var(--bege-medio);
   border-radius: var(--raio);
   overflow: hidden;
@@ -124,10 +151,10 @@
 }
 
 .numero-control button {
-  padding: 12px 18px;
+  padding: 10px 15px;
   border: none;
   background: var(--bege-claro);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   color: var(--texto-suave);
   transition: background var(--transicao);
@@ -141,32 +168,32 @@
 .numero-control span {
   flex: 1;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--texto);
 }
 
 .input-hint {
-  font-size: 0.8rem;
+  font-size: 0.73rem;
   color: var(--texto-suave);
-  margin-top: 6px;
+  margin-top: 5px;
 }
 
 /* ===== CHUTE ===== */
 .chute-opcoes {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
 }
 
 .chute-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 24px 16px;
+  gap: 6px;
+  padding: 18px 12px;
   border: 2px solid var(--bege-medio);
-  border-radius: 20px;
+  border-radius: 16px;
   background: var(--bege-claro);
   cursor: pointer;
   transition: all var(--transicao);
@@ -175,8 +202,8 @@
   position: relative;
 }
 
-.chute-icon  { font-size: 2.2rem; }
-.chute-label { font-size: 0.95rem; }
+.chute-icon  { font-size: 1.9rem; }
+.chute-label { font-size: 0.88rem; }
 
 .chute-menina:hover {
   border-color: #c4848a;
@@ -204,33 +231,53 @@
 
 .chute-check {
   position: absolute;
-  top: 10px; right: 14px;
-  font-size: 0.85rem;
+  top: 8px; right: 12px;
+  font-size: 0.8rem;
   font-weight: 700;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  margin: 14px 0;
 }
 
 /* ===== SUBMIT ===== */
 .submit-btn {
-  padding: 17px;
-  font-size: 0.95rem;
-  margin-bottom: 14px;
+  padding: 14px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
 }
 
 .form-nota {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--texto-claro);
   text-align: center;
   opacity: 0.7;
 }
 
 /* ===== RESPONSIVO ===== */
-@media (max-width: 540px) {
+@media (max-width: 500px) {
+  .confirmacao-page {
+    align-items: flex-start;
+  }
+
+  .confirmacao-page .container {
+    max-width: 100%;
+  }
+
+  .form-card {
+    padding: 18px 16px;
+  }
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
   }
 
   .chute-btn {
-    padding: 18px 10px;
+    padding: 14px 10px;
   }
+
+  .confirmacao-titulo { font-size: 1.9rem; }
+  .confirmacao-urso   { font-size: 2rem; }
 }

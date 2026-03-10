@@ -102,27 +102,11 @@ export default function ConfirmacaoPage() {
                   autoComplete="name"
                 />
                 {erros.nome && <span className="error-msg">⚠ {erros.nome}</span>}
-              </div>
 
-              {/* EMAIL E TELEFONE */}
-              <div className="form-row">
-                <div className="input-group">
-                  <label htmlFor="email">
-                    E-mail <span className="opcional">(opcional)</span>
-                  </label>
-                  <input
-                    id="email" name="email" type="email"
-                    value={form.email} onChange={handleChange}
-                    placeholder="seu@email.com"
-                    className={erros.email ? 'input-error' : ''}
-                    autoComplete="email"
-                  />
-                  {erros.email && <span className="error-msg">⚠ {erros.email}</span>}
-                </div>
 
                 <div className="input-group">
                   <label htmlFor="telefone">
-                    WhatsApp <span className="opcional">(opcional)</span>
+                    WhatsApp *
                   </label>
                   <input
                     id="telefone" name="telefone" type="tel"
@@ -131,8 +115,9 @@ export default function ConfirmacaoPage() {
                     autoComplete="tel"
                   />
                 </div>
-              </div>
 
+              </div>
+             
               <div className="divider">🐻</div>
 
               {/* PRESENÇA */}
@@ -163,33 +148,7 @@ export default function ConfirmacaoPage() {
                 {erros.presenca && <span className="error-msg">⚠ {erros.presenca}</span>}
               </div>
 
-              {/* ACOMPANHANTES */}
-              {form.presenca === 'sim' && (
-                <div className="input-group acomp-group">
-                  <label>Número de acompanhantes</label>
-                  <div className="numero-control">
-                    <button
-                      type="button"
-                      onClick={() => setForm(p => ({
-                        ...p,
-                        acompanhantes: Math.max(0, parseInt(p.acompanhantes) - 1).toString()
-                      }))}
-                    >−</button>
-                    <span>{form.acompanhantes}</span>
-                    <button
-                      type="button"
-                      onClick={() => setForm(p => ({
-                        ...p,
-                        acompanhantes: (parseInt(p.acompanhantes) + 1).toString()
-                      }))}
-                    >+</button>
-                  </div>
-                  <p className="input-hint">
-                    Total no evento: {parseInt(form.acompanhantes) + 1} pessoa(s)
-                  </p>
-                </div>
-              )}
-
+            
               <div className="divider">🎀</div>
 
               {/* CHUTE */}

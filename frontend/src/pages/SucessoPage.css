@@ -2,38 +2,48 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 40px 0;
+  justify-content: center;
+  padding: 24px 0;
 }
 
+/* ===== CONTAINER CENTRALIZADO ===== */
+.sucesso-page .container {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== CARD ===== */
 .sucesso-card {
   text-align: center;
-  max-width: 520px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 460px;
 }
 
 /* ===== ÍCONE ===== */
 .sucesso-icon {
-  font-size: 4rem;
+  font-size: 3.5rem;
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   animation: float 2.5s ease-in-out infinite;
 }
 
 /* ===== TÍTULO ===== */
 .sucesso-titulo {
   font-family: var(--fonte-script);
-  font-size: clamp(2rem, 8vw, 3.2rem);
+  font-size: 2.6rem;
   color: var(--marrom);
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 /* ===== MENSAGEM ===== */
 .sucesso-mensagem {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--texto-suave);
   line-height: 1.7;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 /* ===== CHUTE CONFIRMADO ===== */
@@ -41,14 +51,14 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px 22px;
+  padding: 14px 18px;
   border-radius: 14px;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
   text-align: left;
 }
 
 .chute-emoji {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 .chute-menina {
@@ -62,7 +72,7 @@
 }
 
 .chute-label-small {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--texto-suave);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -70,7 +80,7 @@
 }
 
 .chute-valor {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--texto);
 }
@@ -78,17 +88,18 @@
 /* ===== LEMBRETE ===== */
 .sucesso-lembrete {
   background: var(--bege-claro);
+  border: 1px solid var(--bege-medio);
   border-radius: 14px;
-  padding: 18px 22px;
+  padding: 14px 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   text-align: left;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .sucesso-lembrete p {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--texto-suave);
 }
 
@@ -117,4 +128,19 @@
   position: absolute;
   top: -20px;
   animation: confettiFall linear infinite;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 500px) {
+  .sucesso-page {
+    align-items: flex-start;
+    padding: 16px 0;
+  }
+
+  .sucesso-page .container {
+    max-width: 100%;
+  }
+
+  .sucesso-titulo { font-size: 2.1rem; }
+  .sucesso-icon   { font-size: 3rem; }
 }

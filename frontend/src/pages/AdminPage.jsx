@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { getConfirmacoes, deletarConfirmacao, updateEvento, getEvento } from '../hooks/useApi'
 import BalloonDecor from '../components/FloralDecor'
+import { Eye, EyeOff } from 'lucide-react'
 import './AdminPage.css'
 
 export default function AdminPage() {
   const [autenticado, setAutenticado] = useState(false)
+  const [atualizando, setAtualizando] = useState(false)
   const [adminKey, setAdminKey] = useState('')
   const [senhaInput, setSenhaInput] = useState('')
   const [senhaError, setSenhaError] = useState('')
+  const [verSenha, setVerSenha] = useState(false)
 
   const [confirmacoes, setConfirmacoes] = useState([])
   const [stats, setStats] = useState(null)
@@ -25,6 +28,7 @@ export default function AdminPage() {
       setConfirmacoes(data.data)
       setStats(data.stats)
       setAutenticado(true)
+
       const ev = await getEvento()
       setEventoForm(ev)
     } catch {
@@ -35,9 +39,28 @@ export default function AdminPage() {
   }
 
   async function recarregar() {
-    const data = await getConfirmacoes(adminKey)
-    setConfirmacoes(data.data)
-    setStats(data.stats)
+    if (!adminKey) {
+      alert('Chave de administrador não encontrada. Faça login novamente.')
+      return
+    }
+
+    setAtualizando(true)
+
+    try {
+      const data = await getConfirmacoes(adminKey)
+      setConfirmacoes(data.data)
+      setStats(data.stats)
+
+      if (aba === 'evento') {
+        const ev = await getEvento()
+        setEventoForm(ev)
+      }
+    } catch (err) {
+      alert(err?.message || 'Erro ao atualizar os dados.')
+      console.error('Erro ao recarregar:', err)
+    } finally {
+      setAtualizando(false)
+    }
   }
 
   async function deletar(id) {
@@ -60,7 +83,6 @@ export default function AdminPage() {
     }
   }
 
-  // ===== TELA DE LOGIN =====
   if (!autenticado) {
     return (
       <div className="page-bg admin-login-page">
@@ -74,14 +96,29 @@ export default function AdminPage() {
 
               <div className="input-group">
                 <label>Senha de acesso</label>
-                <input
-                  type="password"
-                  value={senhaInput}
-                  onChange={e => { setSenhaInput(e.target.value); setSenhaError('') }}
-                  onKeyDown={e => e.key === 'Enter' && login()}
-                  placeholder="••••••••"
-                  className={senhaError ? 'input-error' : ''}
-                />
+                <div className="senha-wrapper">
+                  <input
+                    type={verSenha ? 'text' : 'password'}
+                    value={senhaInput}
+                    onChange={e => {
+                      setSenhaInput(e.target.value)
+                      setSenhaError('')
+                    }}
+                    onKeyDown={e => e.key === 'Enter' && login()}
+                    placeholder="••••••••"
+                    className={senhaError ? 'input-error' : ''}
+                  />
+
+                  <button
+                    type="button"
+                    className="ver-senha-btn"
+                    onClick={() => setVerSenha(v => !v)}
+                    title={verSenha ? 'Ocultar senha' : 'Ver senha'}
+                  >
+                    {verSenha ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+
                 {senhaError && <span className="error-msg">⚠ {senhaError}</span>}
               </div>
 
@@ -93,10 +130,6 @@ export default function AdminPage() {
                 {loading ? '⏳ Entrando...' : '→ Entrar'}
               </button>
 
-              <p className="admin-hint">
-                Senha padrão: <code>cha2025admin</code>
-              </p>
-
               <a href="/" className="admin-voltar">← Voltar ao convite</a>
             </div>
           </div>
@@ -105,25 +138,28 @@ export default function AdminPage() {
     )
   }
 
-  // ===== DASHBOARD =====
   return (
     <div className="page-bg admin-page">
       <div className="page-content">
         <div className="container-wide">
-
-          {/* HEADER */}
           <div className="admin-header">
             <div>
               <h1 className="admin-titulo-dash">🐻 Painel Chá Revelação</h1>
               <p className="admin-sub">Gerencie as confirmações do seu evento</p>
             </div>
             <div className="admin-header-actions">
-              <button className="btn btn-outline" onClick={recarregar}>↻ Atualizar</button>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={recarregar}
+                disabled={atualizando}
+              >
+                {atualizando ? '⏳ Atualizando...' : '↻ Atualizar'}
+              </button>
               <a href="/" className="btn btn-secondary">← Convite</a>
             </div>
           </div>
 
-          {/* STATS */}
           {stats && (
             <div className="stats-grid">
               <div className="stat-card">
@@ -153,7 +189,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* ABAS */}
           <div className="admin-abas">
             <button
               className={`aba-btn ${aba === 'confirmacoes' ? 'aba-ativa' : ''}`}
@@ -169,7 +204,6 @@ export default function AdminPage() {
             </button>
           </div>
 
-          {/* ABA CONFIRMAÇÕES */}
           {aba === 'confirmacoes' && (
             <div className="admin-tabela-wrapper">
               {confirmacoes.length === 0 ? (
@@ -208,15 +242,17 @@ export default function AdminPage() {
                           ) : '—'}
                         </td>
                         <td className="td-contato">
-                          {c.email    && <span>{c.email}</span>}
+                          {c.email && <span>{c.email}</span>}
                           {c.telefone && <span>{c.telefone}</span>}
                           {!c.email && !c.telefone && '—'}
                         </td>
                         <td className="td-msg">{c.mensagem || '—'}</td>
                         <td className="td-data">
                           {new Date(c.criadoEm).toLocaleDateString('pt-BR', {
-                            day: '2-digit', month: '2-digit',
-                            hour: '2-digit', minute: '2-digit'
+                            day: '2-digit',
+                            month: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
                           })}
                         </td>
                         <td>
@@ -224,7 +260,9 @@ export default function AdminPage() {
                             className="btn-deletar"
                             onClick={() => deletar(c.id)}
                             title="Remover"
-                          >🗑</button>
+                          >
+                            🗑
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -234,19 +272,18 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* ABA EDITAR EVENTO */}
           {aba === 'evento' && (
             <div className="card evento-form">
               <h2 className="evento-form-titulo">Editar dados do evento</h2>
 
               <div className="evento-form-grid">
                 {[
-                  { key: 'nomeCasal',               label: 'Nome do casal',                     placeholder: 'Os futuros papais' },
-                  { key: 'data',                     label: 'Data',                              placeholder: '25 de Março de 2025' },
-                  { key: 'horario',                  label: 'Horário',                           placeholder: '15h00' },
-                  { key: 'local',                    label: 'Local',                             placeholder: 'Espaço Felicitá Festas' },
-                  { key: 'endereco',                 label: 'Endereço',                          placeholder: 'Rua, número — Cidade' },
-                  { key: 'dataLimiteConfirmacao',    label: 'Data limite (DD-MM-AAAA)',           placeholder: '20-03-2025' },
+                  { key: 'nomeCasal', label: 'Nome do casal', placeholder: 'Os futuros papais' },
+                  { key: 'data', label: 'Data', placeholder: '29 de Março de 2025' },
+                  { key: 'horario', label: 'Horário', placeholder: '15h00' },
+                  { key: 'local', label: 'Local', placeholder: 'Espaço Felicitá Festas' },
+                  { key: 'endereco', label: 'Endereço', placeholder: 'Rua, número — Cidade' },
+                  { key: 'dataLimiteConfirmacao', label: 'Data limite (DD-MM-AAAA)', placeholder: '20-03-2025' },
                 ].map(({ key, label, placeholder }) => (
                   <div key={key} className="input-group">
                     <label>{label}</label>
@@ -298,7 +335,6 @@ export default function AdminPage() {
               </div>
             </div>
           )}
-
         </div>
       </div>
     </div>
